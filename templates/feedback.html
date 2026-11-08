@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Feedback Mahasiswa</h2>
+        <form method="post" action="/feedback">
+            <input type="text" name="nama" placeholder="Nama kamu" required>
+            <textarea name="pesan" placeholder="Pesan/keluhan" required></textarea>
+            <button type="submit">Kirim</button>
+        </form>
+        <hr>
+        {% for row in data %}
+        <!-- BUG SENGAJA: pesan di-render langsung pakai |safe, tanpa escaping -->
+        <div class="feedback-item">
+            <b>{{ row[0] }}</b>: {{ row[1] | safe }}
+        </div>
+        {% endfor %}
+        <p><a href="/">Kembali ke Login</a></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - SIMAHASISWA</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Login SIMAHASISWA</h2>
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
+        <form method="post" action="/login">
+            <input type="text" name="nim" placeholder="NIM" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p><a href="/search">Cari Mahasiswa</a> | <a href="/feedback">Feedback</a></p>
+    </div>
+</body>
+</html>

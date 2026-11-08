@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cari Mahasiswa</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Cari Mahasiswa</h2>
+        <form method="post" action="/search">
+            <input type="text" name="keyword" placeholder="Nama mahasiswa">
+            <button type="submit">Cari</button>
+        </form>
+        {% if results %}
+        <table border="1">
+            <tr><th>NIM</th><th>Nama</th><th>Jurusan</th></tr>
+            {% for row in results %}
+            <tr><td>{{ row[0] }}</td><td>{{ row[1] }}</td><td>{{ row[2] }}</td></tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        <p><a href="/">Kembali ke Login</a></p>
+    </div>
+</body>
+</html>
