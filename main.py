@@ -14,43 +14,35 @@ def startup():
 
 @app.get("/", response_class=HTMLResponse)
 def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request, "error": None})
+    return templates.TemplateResponse(request, "login.html", {"error": None})
 
-# ====== SENGAJA VULNERABLE: SQL Injection di login ======
 @app.post("/login", response_class=HTMLResponse)
 def login(request: Request, nim: str = Form(...), password: str = Form(...)):
     conn = get_connection()
     cur = conn.cursor()
-
-    # BUG SENGAJA: query digabung string mentah, tanpa parameterized
     query = f"SELECT * FROM mahasiswa WHERE nim = '{nim}' AND password = '{password}'"
     cur.execute(query)
     user = cur.fetchone()
     cur.close()
     conn.close()
-
     if user:
-        return templates.TemplateResponse("dashboard.html", {"request": request, "user": user})
-    return templates.TemplateResponse("login.html", {"request": request, "error": "NIM atau password salah"})
+        return templates.TemplateResponse(request, "dashboard.html", {"user": user})
+    return templates.TemplateResponse(request, "login.html", {"error": "NIM atau password salah"})
 
 @app.get("/search", response_class=HTMLResponse)
 def search_page(request: Request):
-    return templates.TemplateResponse("search.html", {"request": request, "results": None})
+    return templates.TemplateResponse(request, "search.html", {"results": None})
 
-# ====== SENGAJA VULNERABLE: SQL Injection di pencarian ======
 @app.post("/search", response_class=HTMLResponse)
 def search(request: Request, keyword: str = Form(...)):
     conn = get_connection()
     cur = conn.cursor()
-
-    # BUG SENGAJA: query digabung string mentah
     query = f"SELECT nim, nama, jurusan FROM mahasiswa WHERE nama LIKE '%{keyword}%'"
     cur.execute(query)
     results = cur.fetchall()
     cur.close()
     conn.close()
-
-    return templates.TemplateResponse("search.html", {"request": request, "results": results})
+    return templates.TemplateResponse(request, "search.html", {"results": results})
 
 @app.get("/feedback", response_class=HTMLResponse)
 def feedback_page(request: Request):
@@ -60,9 +52,8 @@ def feedback_page(request: Request):
     data = cur.fetchall()
     cur.close()
     conn.close()
-    return templates.TemplateResponse("feedback.html", {"request": request, "data": data})
+    return templates.TemplateResponse(request, "feedback.html", {"data": data})
 
-# ====== SENGAJA VULNERABLE: XSS, output tanpa escaping ======
 @app.post("/feedback", response_class=HTMLResponse)
 def feedback_submit(request: Request, nama: str = Form(...), pesan: str = Form(...)):
     conn = get_connection()
