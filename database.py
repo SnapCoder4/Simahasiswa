@@ -1,8 +1,9 @@
+import os
 import psycopg2
 
 def get_connection():
     return psycopg2.connect(
-        host="localhost",
+        host=os.getenv("DB_HOST", "localhost"),
         database="simahasiswa",
         user="postgres",
         password="postgres123"
@@ -27,7 +28,6 @@ def init_db():
             pesan TEXT
         )
     """)
-    # Data dummy
     cur.execute("SELECT COUNT(*) FROM mahasiswa")
     if cur.fetchone()[0] == 0:
         cur.execute("""
